@@ -28,6 +28,8 @@ npm test
 1. Zkopíruj `recipes/_template.json` jako `recipes/<tvuj-login>-<lektvar>.json`.
 2. V poli `locale` ponech `cs`, nebo zapiš `sk` pro slovenský recept.
 3. Doplň `slug`, `name`, `effect`, `limitation` a alespoň dvě ingredience.
+   - `slug` smí obsahovat jen malá písmena, číslice a pomlčky, například `ada-lektvar-soustredeni`.
+   - Textová pole ani jednotlivé ingredience nesmějí být prázdné nebo obsahovat prázdný řádek.
 4. Bez obrázku nech `"image": null`.
 5. S obrázkem ulož soubor do `assets/potions/` a do `image` zapiš jeho cestu.
 
