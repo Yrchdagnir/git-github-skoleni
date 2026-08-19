@@ -1,0 +1,9 @@
+{
+  "locale": "sk",
+  "slug": "potion-of-giga-git",
+  "name": "Giga GIT",
+  "effect": "Človek po vypití nedostane merge conflicts celých 10 minút",
+  "limitation": "Všetko podobné sa duplikuje",
+  "ingredients": ["Git Bash", "Git Hub Desktop", "GogomanTV", "Zelenina, mrkva"],
+  "image": "assets/potions/giga_git_tex.png"
+}
