@@ -14,9 +14,9 @@ Rozhraní i startovní recepty lze přepínat mezi češtinou a slovenštinou.
 
 - [Krokový průvodce školením](https://yrchdagnir.github.io/git-github-skoleni/workshop/)
 - [Archiv lektvarů](https://yrchdagnir.github.io/git-github-skoleni/)
-- [Lektorský panel](https://yrchdagnir.github.io/git-github-skoleni/workshop/facilitator.html)
+- [Facilitátorské poznámky](https://yrchdagnir.github.io/git-github-skoleni/workshop/facilitator.html)
 
-Průvodce je plně česky a slovensky. Lektor odemyká tempo odkazy ve tvaru `/workshop/?unlock=<step-id>`; stav se ukládá pouze v prohlížeči účastníka.
+Průvodce je plně česky a slovensky a všechny lekce jsou stále dostupné. Dokončené kroky a jazyk se ukládají pouze v prohlížeči účastníka. Facilitátorská stránka obsahuje cíle, aktivity, očekávané výsledky, rizika a debrief otázky ke každé lekci.
 
 ## Příprava
 

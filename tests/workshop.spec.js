@@ -5,36 +5,30 @@ test.beforeEach(async ({ page }) => {
   await page.evaluate(() => localStorage.clear());
 });
 
-test("starts in Czech with preparation and the first Git lesson available", async ({ page }) => {
+test("starts in Czech with every lesson available", async ({ page }) => {
   await page.goto("/workshop/");
 
   await expect(page).toHaveTitle("Průvodce školením | Git a GitHub");
   await expect(page.getByRole("heading", { name: "Nástroje pro dílnu" })).toBeVisible();
-  await expect(page.getByRole("button", { name: /Založ vlastní dílnu/ })).toBeEnabled();
-  await expect(page.getByRole("button", { name: /Od změny ke commitu/ })).toBeDisabled();
+  await expect(page.locator(".step-link:not([disabled])")).toHaveCount(23);
+  await expect(page.locator(".step-link[disabled]")).toHaveCount(0);
+  await expect(page.getByRole("button", { name: /Od merge k release a webu/ })).toBeEnabled();
 });
 
-test("valid unlock links reveal their step and all previous steps", async ({ page }) => {
+test("legacy unlock links are cleaned up without changing the open guide", async ({ page }) => {
   await page.goto("/workshop/?unlock=github-pr");
 
   await expect(page).toHaveURL(/\/workshop\/$/);
-  await expect(page.getByRole("heading", { name: "Otevři pull request" })).toBeVisible();
-  await expect(page.getByText("Odemčeno: Otevři pull request")).toBeVisible();
-  await expect(page.getByRole("button", { name: /Přidej vlastní lektvar/ })).toBeEnabled();
-  await expect(page.getByRole("button", { name: /Review je rozhovor o změně/ })).toBeDisabled();
-
-  await page.reload();
-  await expect(page.getByRole("button", { name: /Otevři pull request/ })).toBeEnabled();
-  await expect(page.getByRole("button", { name: /Review je rozhovor o změně/ })).toBeDisabled();
+  await expect(page.getByRole("heading", { name: "Nástroje pro dílnu" })).toBeVisible();
+  await expect(page.locator(".step-link:not([disabled])")).toHaveCount(23);
 });
 
-test("invalid unlock links leave progress unchanged", async ({ page }) => {
-  await page.goto("/workshop/?unlock=neexistujici-krok");
+test("lesson hashes open a specific lesson directly", async ({ page }) => {
+  await page.goto("/workshop/#github-pr");
 
-  await expect(page).toHaveURL(/\/workshop\/$/);
-  await expect(page.getByRole("button", { name: /Založ vlastní dílnu/ })).toBeEnabled();
-  await expect(page.getByRole("button", { name: /Od změny ke commitu/ })).toBeDisabled();
-  await expect(page.locator("#unlock-notice")).toBeHidden();
+  await expect(page).toHaveURL(/\/workshop\/#github-pr$/);
+  await expect(page.getByRole("heading", { name: "Otevři pull request" })).toBeVisible();
+  await expect(page.getByRole("button", { name: /Review je rozhovor o změně/ })).toBeEnabled();
 });
 
 test("completed steps and language survive reload independently", async ({ page }) => {
@@ -50,7 +44,7 @@ test("completed steps and language survive reload independently", async ({ page 
 });
 
 test("the Slovak version covers the entire guide", async ({ page }) => {
-  await page.goto("/workshop/?unlock=actions-release-pages");
+  await page.goto("/workshop/#actions-release-pages");
   await page.getByRole("button", { name: "Slovenčina" }).click();
 
   await expect(page.getByRole("heading", { name: "Od merge k release a webu" })).toBeVisible();
@@ -62,8 +56,8 @@ test("the Slovak version covers the entire guide", async ({ page }) => {
   await expect(page.getByText("Recept iba v slovenčine sa v češtine nezobrazí.")).toBeVisible();
 });
 
-test("reset requires confirmation and restores the default locks", async ({ page }) => {
-  await page.goto("/workshop/?unlock=github-pr");
+test("reset requires confirmation and clears only completed steps", async ({ page }) => {
+  await page.goto("/workshop/#github-pr");
   await page.getByLabel("Tomuto kroku rozumím").check();
   page.once("dialog", dialog => dialog.dismiss());
   await page.getByRole("button", { name: "Resetovat postup" }).click();
@@ -72,7 +66,8 @@ test("reset requires confirmation and restores the default locks", async ({ page
   page.once("dialog", dialog => dialog.accept());
   await page.getByRole("button", { name: "Resetovat postup" }).click();
   await expect(page.getByRole("heading", { name: "Nástroje pro dílnu" })).toBeVisible();
-  await expect(page.getByRole("button", { name: /Od změny ke commitu/ })).toBeDisabled();
+  await expect(page.locator(".step-link:not([disabled])")).toHaveCount(23);
+  await expect(page.locator(".step-link[disabled]")).toHaveCount(0);
   await expect(page.locator("#progress-value")).toHaveText("0 / 23");
 });
 
@@ -94,24 +89,30 @@ test("cheat sheet searches and copies commands", async ({ page }) => {
   await expect(page.locator("#toast")).toHaveText("Příkaz zkopírován");
 });
 
-test("facilitator panel creates a working unlock link", async ({ page }) => {
-  await page.addInitScript(() => {
-    window.__copiedUnlock = "";
-    Object.defineProperty(navigator, "clipboard", {
-      value: { writeText: async value => { window.__copiedUnlock = value; } },
-      configurable: true
-    });
-  });
+test("facilitator notes cover lessons and link back to the guide", async ({ page }) => {
   await page.goto("/workshop/facilitator.html");
-  const row = page.locator('[data-step-id="actions-failure"]');
-  await expect(row).toContainText("Rozbij, přečti, oprav");
-  await row.getByRole("button", { name: "Kopírovat odkaz" }).click();
-  await expect(page.locator("#toast")).toHaveText("Odemykací odkaz zkopírován");
-
-  const copiedUrl = await page.evaluate(() => window.__copiedUnlock);
-  expect(copiedUrl).toContain("/workshop/?unlock=actions-failure");
-  await page.goto(copiedUrl);
+  await expect(page).toHaveTitle("Facilitátorské poznámky | Git a GitHub");
+  await expect(page.locator(".lesson-note")).toHaveCount(23);
+  const note = page.locator('[data-step-id="actions-failure"]');
+  await note.locator("summary").click();
+  await expect(note.getByRole("heading", { name: "Hlavní myšlenka" })).toBeVisible();
+  await expect(note.getByRole("heading", { name: "Aktivita účastníků" })).toBeVisible();
+  await expect(note.getByRole("heading", { name: "Debrief" })).toBeVisible();
+  const lessonLink = note.getByRole("link", { name: "Otevřít lekci v průvodci" });
+  await expect(lessonLink).toHaveAttribute("href", "./#actions-failure");
+  await lessonLink.click();
   await expect(page.getByRole("heading", { name: "Rozbij, přečti, oprav" })).toBeVisible();
+});
+
+test("facilitator notes can be searched and expanded", async ({ page }) => {
+  await page.goto("/workshop/facilitator.html");
+  await page.locator("#notes-search").fill("slice(0, 1)");
+  await expect(page.locator(".lesson-note")).toHaveCount(1);
+  await expect(page.locator('[data-step-id="actions-failure"]')).toBeVisible();
+  await page.getByRole("button", { name: "Sbalit vše" }).click();
+  await expect(page.locator('[data-step-id="actions-failure"]')).not.toHaveAttribute("open", "");
+  await page.getByRole("button", { name: "Rozbalit vše" }).click();
+  await expect(page.locator('[data-step-id="actions-failure"]')).toHaveAttribute("open", "");
 });
 
 test("primary controls can be reached and used from the keyboard", async ({ page }) => {
@@ -130,7 +131,7 @@ test("primary controls can be reached and used from the keyboard", async ({ page
 
 test("mobile navigation and cheat sheet fit without horizontal overflow", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
-  await page.goto("/workshop/?unlock=actions-release-pages");
+  await page.goto("/workshop/#actions-release-pages");
 
   await expect(page.getByRole("heading", { name: "Od merge k release a webu" })).toBeVisible();
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);

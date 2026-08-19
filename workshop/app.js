@@ -2,10 +2,8 @@ import { chapters, cheatSheet, steps } from "./content.js";
 
 const STORAGE = {
   locale: "git-workshop.locale",
-  unlocked: "git-workshop.maxUnlocked",
   completed: "git-workshop.completed"
 };
-const DEFAULT_MAX_UNLOCKED = steps.findIndex(step => step.id === "local-repository");
 
 const ui = {
   cs: {
@@ -13,8 +11,7 @@ const ui = {
     brandContext: "Alchymistická dílna",
     progress: "Postup",
     reset: "Resetovat postup",
-    resetConfirm: "Opravdu chceš smazat dokončené kroky a vrátit odemykání na začátek?",
-    unlocked: title => `Odemčeno: ${title}`,
+    resetConfirm: "Opravdu chceš smazat všechny dokončené kroky?",
     lessonView: "Kapitola",
     cheatView: "Tahák",
     theory: "Nejdřív si ujasníme",
@@ -26,7 +23,6 @@ const ui = {
     complete: "Tomuto kroku rozumím",
     previous: "Předchozí",
     next: "Další",
-    locked: "Zamčeno",
     minutes: value => `${value} min`,
     cheatEyebrow: "Po ruce",
     cheatTitle: "Git tahák",
@@ -45,8 +41,7 @@ const ui = {
     brandContext: "Alchymistická dielňa",
     progress: "Postup",
     reset: "Resetovať postup",
-    resetConfirm: "Naozaj chceš zmazať dokončené kroky a vrátiť odomykanie na začiatok?",
-    unlocked: title => `Odomknuté: ${title}`,
+    resetConfirm: "Naozaj chceš zmazať všetky dokončené kroky?",
     lessonView: "Kapitola",
     cheatView: "Ťahák",
     theory: "Najprv si ujasníme",
@@ -58,7 +53,6 @@ const ui = {
     complete: "Tomuto kroku rozumiem",
     previous: "Predchádzajúci",
     next: "Ďalší",
-    locked: "Zamknuté",
     minutes: value => `${value} min`,
     cheatEyebrow: "Poruke",
     cheatTitle: "Git ťahák",
@@ -84,7 +78,6 @@ const elements = {
   progressValue: document.querySelector("#progress-value"),
   progressBar: document.querySelector("#progress-bar"),
   reset: document.querySelector("#reset-progress"),
-  notice: document.querySelector("#unlock-notice"),
   lessonChapter: document.querySelector("#lesson-chapter"),
   lessonTitle: document.querySelector("#lesson-title"),
   lessonDuration: document.querySelector("#lesson-duration"),
@@ -129,35 +122,26 @@ function safeCompleted() {
 const storedLocale = localStorage.getItem(STORAGE.locale);
 const state = {
   locale: storedLocale === "sk" ? "sk" : "cs",
-  maxUnlocked: Math.min(Math.max(Number.parseInt(localStorage.getItem(STORAGE.unlocked) ?? String(DEFAULT_MAX_UNLOCKED), 10) || 0, DEFAULT_MAX_UNLOCKED), steps.length - 1),
   completed: safeCompleted(),
   currentIndex: 0,
-  mobileView: "lesson",
-  unlockNotice: null
+  mobileView: "lesson"
 };
 
 function saveCompleted() {
   localStorage.setItem(STORAGE.completed, JSON.stringify([...state.completed]));
 }
 
-function stripUnlockParameter() {
+function cleanLegacyUnlockParameter() {
   const url = new URL(window.location.href);
   if (!url.searchParams.has("unlock")) return;
   url.searchParams.delete("unlock");
   history.replaceState({}, "", `${url.pathname}${url.search}${url.hash}`);
 }
 
-function readUnlockParameter() {
-  const id = new URL(window.location.href).searchParams.get("unlock");
-  if (!id) return;
+function readLessonHash() {
+  const id = window.location.hash.slice(1);
   const index = steps.findIndex(step => step.id === id);
-  if (index >= 0) {
-    state.maxUnlocked = Math.max(state.maxUnlocked, index);
-    state.currentIndex = index;
-    state.unlockNotice = id;
-    localStorage.setItem(STORAGE.unlocked, String(state.maxUnlocked));
-  }
-  stripUnlockParameter();
+  if (index >= 0) state.currentIndex = index;
 }
 
 function paragraphList(target, paragraphs) {
@@ -237,14 +221,12 @@ function renderNavigation() {
       if (step.chapter !== chapter.id) return;
       const item = document.createElement("li");
       const button = document.createElement("button");
-      const locked = index > state.maxUnlocked;
       button.type = "button";
-      button.disabled = locked;
       button.dataset.stepId = step.id;
       button.className = "step-link";
       if (index === state.currentIndex) button.setAttribute("aria-current", "step");
-      const marker = state.completed.has(step.id) ? "✓" : locked ? "⌁" : String(index + 1).padStart(2, "0");
-      button.innerHTML = `<span class="step-marker" aria-hidden="true">${marker}</span><span>${step.content[state.locale].title}</span>${locked ? `<span class="sr-only">${ui[state.locale].locked}</span>` : ""}`;
+      const marker = state.completed.has(step.id) ? "✓" : String(index + 1).padStart(2, "0");
+      button.innerHTML = `<span class="step-marker" aria-hidden="true">${marker}</span><span>${step.content[state.locale].title}</span>`;
       button.addEventListener("click", () => selectStep(index));
       item.append(button);
       list.append(item);
@@ -271,9 +253,7 @@ function renderLesson() {
   elements.commandsSection.hidden = step.commands.length === 0;
   elements.complete.checked = state.completed.has(step.id);
   elements.previous.disabled = state.currentIndex === 0;
-  elements.next.disabled = state.currentIndex >= state.maxUnlocked || state.currentIndex === steps.length - 1;
-  elements.notice.hidden = state.unlockNotice !== step.id;
-  if (!elements.notice.hidden) elements.notice.textContent = ui[state.locale].unlocked(content.title);
+  elements.next.disabled = state.currentIndex === steps.length - 1;
 }
 
 function renderProgress() {
@@ -342,9 +322,9 @@ function render() {
 }
 
 function selectStep(index) {
-  if (index < 0 || index > state.maxUnlocked) return;
+  if (index < 0 || index >= steps.length) return;
   state.currentIndex = index;
-  state.unlockNotice = null;
+  history.replaceState({}, "", `${window.location.pathname}${window.location.search}#${steps[index].id}`);
   renderNavigation();
   renderLesson();
   if (window.matchMedia("(max-width: 820px)").matches) setMobileView("lesson");
@@ -372,12 +352,10 @@ elements.next.addEventListener("click", () => selectStep(state.currentIndex + 1)
 elements.search.addEventListener("input", renderCheatSheet);
 elements.reset.addEventListener("click", () => {
   if (!window.confirm(ui[state.locale].resetConfirm)) return;
-  state.maxUnlocked = DEFAULT_MAX_UNLOCKED;
   state.currentIndex = 0;
   state.completed.clear();
-  state.unlockNotice = null;
-  localStorage.removeItem(STORAGE.unlocked);
   localStorage.removeItem(STORAGE.completed);
+  history.replaceState({}, "", `${window.location.pathname}${window.location.search}`);
   render();
 });
 elements.languageButtons.forEach(button => button.addEventListener("click", () => {
@@ -387,6 +365,8 @@ elements.languageButtons.forEach(button => button.addEventListener("click", () =
 }));
 elements.mobileButtons.forEach(button => button.addEventListener("click", () => setMobileView(button.dataset.mobileView)));
 
-readUnlockParameter();
+cleanLegacyUnlockParameter();
+localStorage.removeItem("git-workshop.maxUnlocked");
+readLessonHash();
 setMobileView("lesson");
 render();
