@@ -13,14 +13,23 @@ async function expectRecipeCountToMatchCards(page) {
   expect(displayedCount).toBe(count);
 }
 
+async function expectStarterRecipes(page, names) {
+  for (const [slug, name] of Object.entries(names)) {
+    const card = page.locator(`[data-potion-id="${slug}"]`);
+    await expect(card.getByRole("heading", { name, exact: true })).toBeVisible();
+  }
+}
+
 test("shows the Czech starter recipes and matching count", async ({ page }) => {
   await page.goto("/");
 
   await expect(page).toHaveTitle("Archiv lektvarů");
   await expect(page.getByRole("heading", { name: "Archiv lektvarů" })).toBeVisible();
-  await expect(page.getByRole("heading", { name: "Lucerna ozvěn" })).toBeVisible();
-  await expect(page.getByRole("heading", { name: "Strážce žhavých uhlíků" })).toBeVisible();
-  await expect(page.getByRole("heading", { name: "Měsíční krok" })).toBeVisible();
+  await expectStarterRecipes(page, {
+    "echo-lantern": "Lucerna ozvěn",
+    emberguard: "Strážce žhavých uhlíků",
+    moonstep: "Měsíční krok"
+  });
   await expectRecipeCountToMatchCards(page);
 });
 
@@ -30,9 +39,11 @@ test("switches the interface and recipes to Slovak", async ({ page }) => {
 
   await expect(page).toHaveTitle("Archív elixírov");
   await expect(page.getByRole("heading", { name: "Archív elixírov" })).toBeVisible();
-  await expect(page.getByRole("heading", { name: "Lucerna ozvien" })).toBeVisible();
-  await expect(page.getByRole("heading", { name: "Strážca žeravých uhlíkov" })).toBeVisible();
-  await expect(page.getByRole("heading", { name: "Mesačný krok" })).toBeVisible();
+  await expectStarterRecipes(page, {
+    "echo-lantern": "Lucerna ozvien",
+    emberguard: "Strážca žeravých uhlíkov",
+    moonstep: "Mesačný krok"
+  });
   await expect(page.getByText("Otvorený alchymistický katalóg")).toBeVisible();
   await expect(page.locator("html")).toHaveAttribute("lang", "sk");
   await expectRecipeCountToMatchCards(page);
