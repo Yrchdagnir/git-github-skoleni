@@ -8,7 +8,7 @@ const slugPattern = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const hasNonEmptyLines = value =>
   typeof value === "string" &&
   value.trim() !== "" &&
-  value.split(/\r?\n/).every(line => line.trim() !== "");
+  value.split(/\r\n|\r|\n/).every(line => line.trim() !== "");
 const files = readdirSync(recipeDirectory)
   .filter(file => file.endsWith(".json") && !file.startsWith("_"))
   .sort();
