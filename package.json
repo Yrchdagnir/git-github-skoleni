@@ -14,7 +14,7 @@
     "prestart": "npm run build",
     "start": "node scripts/server.mjs",
     "pretest": "npm run build",
-    "test": "playwright test",
+    "test": "node --test unit-tests/recipe-validation.test.js && playwright test",
     "test:headed": "playwright test --headed",
     "doctor": "node scripts/doctor.mjs",
     "doctor:ci": "node scripts/doctor.mjs --ci",

@@ -3,9 +3,9 @@ import { createServer } from "node:http";
 import { extname, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
-const host = "127.0.0.1";
-const port = 4173;
-const root = resolve(".");
+const defaultHost = "127.0.0.1";
+const defaultPort = 4173;
+const defaultRoot = resolve(".");
 const contentTypes = {
   ".css": "text/css; charset=utf-8",
   ".html": "text/html; charset=utf-8",
@@ -16,7 +16,7 @@ const contentTypes = {
   ".webp": "image/webp"
 };
 
-export function startServer() {
+export function startServer({ host = defaultHost, port = defaultPort, root = defaultRoot } = {}) {
   const server = createServer((request, response) => {
     const pathname = new URL(request.url ?? "/", `http://${host}:${port}`).pathname;
     const decodedPath = decodeURIComponent(pathname);
@@ -50,5 +50,5 @@ const isDirectRun = process.argv[1] && resolve(process.argv[1]) === fileURLToPat
 
 if (isDirectRun) {
   await startServer();
-  console.log(`Potion Archive running at http://${host}:${port}`);
+  console.log(`Potion Archive running at http://${defaultHost}:${defaultPort}`);
 }
