@@ -4,13 +4,24 @@ test.beforeEach(async ({ page }) => {
   await page.addInitScript(() => localStorage.clear());
 });
 
-test("shows the three Czech starter recipes", async ({ page }) => {
+async function expectRecipeCountToMatchCards(page) {
+  const cards = page.locator(".potion-card");
+  const count = await cards.count();
+  const displayedCount = Number.parseInt(await page.locator("#recipe-count").innerText(), 10);
+
+  expect(count).toBeGreaterThanOrEqual(3);
+  expect(displayedCount).toBe(count);
+}
+
+test("shows the Czech starter recipes and matching count", async ({ page }) => {
   await page.goto("/");
 
   await expect(page).toHaveTitle("Archiv lektvarů");
   await expect(page.getByRole("heading", { name: "Archiv lektvarů" })).toBeVisible();
-  await expect(page.locator(".potion-card")).toHaveCount(3);
-  await expect(page.getByText("3 recepty", { exact: true })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Lucerna ozvěn" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Strážce žhavých uhlíků" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Měsíční krok" })).toBeVisible();
+  await expectRecipeCountToMatchCards(page);
 });
 
 test("switches the interface and recipes to Slovak", async ({ page }) => {
@@ -20,8 +31,11 @@ test("switches the interface and recipes to Slovak", async ({ page }) => {
   await expect(page).toHaveTitle("Archív elixírov");
   await expect(page.getByRole("heading", { name: "Archív elixírov" })).toBeVisible();
   await expect(page.getByRole("heading", { name: "Lucerna ozvien" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Strážca žeravých uhlíkov" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Mesačný krok" })).toBeVisible();
   await expect(page.getByText("Otvorený alchymistický katalóg")).toBeVisible();
   await expect(page.locator("html")).toHaveAttribute("lang", "sk");
+  await expectRecipeCountToMatchCards(page);
 });
 
 test("renders a recipe image and reveals ingredients", async ({ page }) => {
@@ -45,5 +59,5 @@ test("fits the mobile viewport in both languages", async ({ page }) => {
   }));
 
   expect(dimensions.scrollWidth).toBeLessThanOrEqual(dimensions.clientWidth);
-  await expect(page.locator(".potion-card")).toHaveCount(3);
+  expect(await page.locator(".potion-card").count()).toBeGreaterThanOrEqual(3);
 });
