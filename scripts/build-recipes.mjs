@@ -4,6 +4,11 @@ import { join } from "node:path";
 const recipeDirectory = "recipes";
 const requiredTextFields = ["slug", "name", "effect", "limitation"];
 const supportedLocales = new Set(["cs", "sk"]);
+const slugPattern = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
+const hasNonEmptyLines = value =>
+  typeof value === "string" &&
+  value.trim() !== "" &&
+  value.split(/\r?\n/).every(line => line.trim() !== "");
 const files = readdirSync(recipeDirectory)
   .filter(file => file.endsWith(".json") && !file.startsWith("_"))
   .sort();
@@ -19,8 +24,8 @@ const recipes = files.map(file => {
   }
 
   for (const field of requiredTextFields) {
-    if (typeof recipe[field] !== "string" || recipe[field].trim() === "") {
-      throw new Error(`${path}: pole "${field}" musí obsahovat text`);
+    if (!hasNonEmptyLines(recipe[field])) {
+      throw new Error(`${path}: pole "${field}" musí obsahovat text bez prázdných řádků`);
     }
   }
 
@@ -28,12 +33,22 @@ const recipes = files.map(file => {
     throw new Error(`${path}: pole "locale" musí být "cs" nebo "sk"`);
   }
 
+  if (!slugPattern.test(recipe.slug)) {
+    throw new Error(
+      `${path}: pole "slug" smí obsahovat jen malá písmena, číslice a pomlčky`
+    );
+  }
+
   if (!Array.isArray(recipe.ingredients) || recipe.ingredients.length < 2) {
     throw new Error(`${path}: pole "ingredients" musí obsahovat alespoň dvě ingredience`);
   }
 
-  if (recipe.image !== null && typeof recipe.image !== "string") {
-    throw new Error(`${path}: pole "image" musí být cesta k obrázku nebo null`);
+  if (!recipe.ingredients.every(hasNonEmptyLines)) {
+    throw new Error(`${path}: každá ingredience musí obsahovat text bez prázdných řádků`);
+  }
+
+  if (recipe.image !== null && !hasNonEmptyLines(recipe.image)) {
+    throw new Error(`${path}: pole "image" musí být neprázdná cesta k obrázku nebo null`);
   }
 
   if (recipe.image && !existsSync(recipe.image)) {
