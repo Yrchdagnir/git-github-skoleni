@@ -8,6 +8,7 @@ const translations = {
     eyebrow: "Otevřený alchymistický katalog",
     introTitle: "Recepty připravené na další výpravu",
     introText: "Každý lektvar má jeden užitek, jedno omezení a krátký seznam ingrediencí.",
+    guide: "Průvodce školením",
     listLabel: "Seznam lektvarů",
     limitation: "Omezení",
     showIngredients: "Ukázat ingredience",
@@ -22,6 +23,7 @@ const translations = {
     eyebrow: "Otvorený alchymistický katalóg",
     introTitle: "Recepty pripravené na ďalšiu výpravu",
     introText: "Každý elixír má jeden úžitok, jedno obmedzenie a krátky zoznam ingrediencií.",
+    guide: "Sprievodca školením",
     listLabel: "Zoznam elixírov",
     limitation: "Obmedzenie",
     showIngredients: "Ukázať ingrediencie",
@@ -107,6 +109,7 @@ function render() {
   document.querySelector("#archive-eyebrow").textContent = text.eyebrow;
   document.querySelector("#archive-title").textContent = text.introTitle;
   document.querySelector("#archive-description").textContent = text.introText;
+  document.querySelector("#workshop-guide-link").textContent = text.guide;
   potionList.setAttribute("aria-label", text.listLabel);
   recipeCount.textContent = text.recipeCount(visibleRecipes.length);
   potionList.replaceChildren();

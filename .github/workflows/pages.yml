@@ -37,6 +37,7 @@ jobs:
           mkdir -p _site
           cp index.html styles.css app.js generated-recipes.js _site/
           cp -R assets _site/
+          cp -R workshop _site/
           touch _site/.nojekyll
 
       - name: Configure GitHub Pages

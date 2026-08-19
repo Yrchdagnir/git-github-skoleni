@@ -21,6 +21,23 @@ button {
   font: inherit;
 }
 
+.guide-link {
+  min-height: 36px;
+  padding: 8px 11px;
+  border: 1px solid #5aa993;
+  border-radius: 4px;
+  color: #d8fff4;
+  font-size: 13px;
+  text-decoration: none;
+  background: #21483d;
+}
+
+.guide-link:hover,
+.guide-link:focus-visible {
+  border-color: #82d1bd;
+  background: #285649;
+}
+
 .topbar {
   display: flex;
   flex-wrap: wrap;
@@ -259,6 +276,7 @@ main {
 
   .topbar-actions {
     width: 100%;
+    flex-wrap: wrap;
     justify-content: space-between;
   }
 
