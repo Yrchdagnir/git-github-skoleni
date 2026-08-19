@@ -1,0 +1,9 @@
+{
+  "locale": "sk",
+  "slug": "echo-lantern",
+  "name": "Lucerna ozvien",
+  "effect": "Zberateľovi napovie, či v miestnosti zostalo niečo dôležité, ale neprezradí kde.",
+  "limitation": "Funguje iba raz v každej miestnosti.",
+  "ingredients": ["kvapka rosy", "prach zo starej mapy", "svetluška v jantári"],
+  "image": "assets/potions/echo-lantern.png"
+}

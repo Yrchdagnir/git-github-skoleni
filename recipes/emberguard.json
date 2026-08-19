@@ -1,0 +1,9 @@
+{
+  "locale": "cs",
+  "slug": "emberguard",
+  "name": "Strážce žhavých uhlíků",
+  "effect": "Chrání ruce alchymisty při manipulaci s horkými nádobami.",
+  "limitation": "Nechrání před otevřeným plamenem.",
+  "ingredients": ["popel z buku", "železný prach", "olej z bodláku"],
+  "image": null
+}

@@ -1,0 +1,9 @@
+{
+  "locale": "cs",
+  "slug": "moonstep",
+  "name": "Měsíční krok",
+  "effect": "Na chvíli ztiší kroky cestovatele při průzkumu starých ruin.",
+  "limitation": "Účinek skončí při běhu.",
+  "ingredients": ["měsíční sůl", "měkký mech", "stříbrná nit"],
+  "image": null
+}

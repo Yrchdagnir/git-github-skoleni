@@ -1,0 +1,9 @@
+{
+  "locale": "cs",
+  "slug": "github-login-nazev-lektvaru",
+  "name": "Název lektvaru",
+  "effect": "Komu pomáhá a co přesně dělá.",
+  "limitation": "Jedno jasné omezení lektvaru.",
+  "ingredients": ["první ingredience", "druhá ingredience"],
+  "image": null
+}

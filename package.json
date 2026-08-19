@@ -1,0 +1,26 @@
+{
+  "name": "git-github-skoleni",
+  "version": "0.0.0-development",
+  "private": true,
+  "description": "Potion Shop sandbox pro skoleni Gitu, GitHubu a GitHub Actions",
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "build": "node scripts/build-recipes.mjs",
+    "predev": "npm run build",
+    "dev": "node scripts/server.mjs",
+    "prestart": "npm run build",
+    "start": "node scripts/server.mjs",
+    "pretest": "npm run build",
+    "test": "playwright test",
+    "test:headed": "playwright test --headed",
+    "doctor": "node scripts/doctor.mjs",
+    "doctor:ci": "node scripts/doctor.mjs --ci",
+    "check:pr-title": "node scripts/check-pr-title.mjs"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.62.1"
+  }
+}

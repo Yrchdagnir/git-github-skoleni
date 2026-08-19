@@ -1,0 +1,9 @@
+{
+  "locale": "sk",
+  "slug": "moonstep",
+  "name": "Mesačný krok",
+  "effect": "Na chvíľu stíši kroky cestovateľa pri prieskume starých ruín.",
+  "limitation": "Účinok sa skončí pri behu.",
+  "ingredients": ["mesačná soľ", "mäkký mach", "strieborná niť"],
+  "image": null
+}

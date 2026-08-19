@@ -1,0 +1,9 @@
+{
+  "locale": "sk",
+  "slug": "emberguard",
+  "name": "Strážca žeravých uhlíkov",
+  "effect": "Chráni ruky alchymistu pri manipulácii s horúcimi nádobami.",
+  "limitation": "Nechráni pred otvoreným plameňom.",
+  "ingredients": ["bukový popol", "železný prach", "olej z bodliaka"],
+  "image": null
+}

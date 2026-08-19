@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="cs">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Archiv lektvarů pro školení Git a GitHub">
+  <title>Archiv lektvarů</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <span class="brand-mark" aria-hidden="true">P</span>
+      <div>
+        <p id="workshop-name" class="context">Dílna U Tří Tyglíků</p>
+        <h1 id="archive-name">Archiv lektvarů</h1>
+      </div>
+    </div>
+    <div class="topbar-actions">
+      <div class="language-switch" role="group" aria-label="Jazyk / Jazyk">
+        <button type="button" data-locale="cs" aria-pressed="true">Čeština</button>
+        <button type="button" data-locale="sk" aria-pressed="false">Slovenčina</button>
+      </div>
+      <p id="recipe-count" class="recipe-count" aria-live="polite">0 receptů</p>
+    </div>
+  </header>
+
+  <main>
+    <section class="archive-intro" aria-labelledby="archive-title">
+      <p id="archive-eyebrow" class="eyebrow">Otevřený alchymistický katalog</p>
+      <h2 id="archive-title">Recepty připravené na další výpravu</h2>
+      <p id="archive-description">Každý lektvar má jeden užitek, jedno omezení a krátký seznam ingrediencí.</p>
+    </section>
+
+    <section id="potion-list" class="potion-grid" aria-label="Seznam lektvarů"></section>
+  </main>
+
+  <template id="potion-template">
+    <article class="potion-card">
+      <div class="potion-media"></div>
+      <div class="potion-content">
+        <h3></h3>
+        <p class="potion-effect"></p>
+        <p class="potion-limitation"><strong>Omezení</strong><span></span></p>
+        <ul class="ingredient-list" hidden></ul>
+        <button class="ingredient-toggle" type="button">Ukázat ingredience</button>
+      </div>
+    </article>
+  </template>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>
