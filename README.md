@@ -10,6 +10,14 @@ Repo neobsahuje žádná interní týmová data. Archiv lektvarů je malá stati
 
 Rozhraní i startovní recepty lze přepínat mezi češtinou a slovenštinou.
 
+## Veřejný web
+
+- [Krokový průvodce školením](https://yrchdagnir.github.io/git-github-skoleni/workshop/)
+- [Archiv lektvarů](https://yrchdagnir.github.io/git-github-skoleni/)
+- [Lektorský panel](https://yrchdagnir.github.io/git-github-skoleni/workshop/facilitator.html)
+
+Průvodce je plně česky a slovensky. Lektor odemyká tempo odkazy ve tvaru `/workshop/?unlock=<step-id>`; stav se ukládá pouze v prohlížeči účastníka.
+
 ## Příprava
 
 Potřebuješ Git for Windows, Git Bash, aktuální Node.js LTS a npm.
@@ -89,7 +97,7 @@ Povolené typy názvu PR:
 feat: fix: docs: test: ci: chore: refactor:
 ```
 
-Při squash merge se název PR stane výsledným commitem. `semantic-release` z něj vytvoří verzi a GitHub Release:
+Pracovní commity i názvy PR používají Conventional Commits. PR se slučují volbou **Create a merge commit** a `semantic-release` čte skutečné commity v historii:
 
 - `fix:` -> patch,
 - `feat:` -> minor,

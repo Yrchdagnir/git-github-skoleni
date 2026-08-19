@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="cs">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Lektorský panel pro odemykání kroků školení Git a GitHub">
+  <title>Lektorský panel | Git a GitHub</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="facilitator.css">
+</head>
+<body class="facilitator-page">
+  <header class="workshop-header">
+    <a class="workshop-brand" href="./">
+      <img src="../assets/potions/echo-lantern.png" alt="">
+      <span><small>Lektorský panel</small><strong>Git &amp; GitHub</strong></span>
+    </a>
+    <a class="back-link" href="./">Zpět do průvodce</a>
+  </header>
+  <main class="facilitator-main">
+    <section class="facilitator-heading">
+      <p class="eyebrow">Řízení tempa</p>
+      <h1>Odemykací odkazy</h1>
+      <p>Odkaz odemkne vybraný krok a všechny předchozí. Nejde o zabezpečení: panel i identifikátory jsou veřejné.</p>
+    </section>
+    <section class="facilitator-toolbar" aria-label="Nástroje lektora">
+      <label><span>Základní adresa průvodce</span><input id="base-url" type="url"></label>
+      <button id="copy-current" class="nav-button primary" type="button">Zkopírovat první krok</button>
+    </section>
+    <div id="facilitator-steps" class="facilitator-steps"></div>
+  </main>
+  <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+  <script type="module" src="facilitator.js"></script>
+</body>
+</html>

@@ -17,7 +17,8 @@ const contentTypes = {
 
 createServer((request, response) => {
   const pathname = new URL(request.url ?? "/", `http://${host}:${port}`).pathname;
-  const requestPath = pathname === "/" ? "/index.html" : decodeURIComponent(pathname);
+  const decodedPath = decodeURIComponent(pathname);
+  const requestPath = decodedPath.endsWith("/") ? `${decodedPath}index.html` : decodedPath;
   const filePath = resolve(root, `.${requestPath}`);
   const relativePath = relative(root, filePath);
 
