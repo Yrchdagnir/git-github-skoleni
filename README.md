@@ -50,6 +50,7 @@ npm test
 3. Doplň `slug`, `name`, `effect`, `limitation` a alespoň dvě ingredience.
    - `slug` smí obsahovat jen malá písmena, číslice a pomlčky, například `ada-lektvar-soustredeni`.
    - Textová pole ani jednotlivé ingredience nesmějí být prázdné nebo obsahovat prázdný řádek.
+   - Výchozí texty a ingredience ze šablony musíš nahradit vlastními; automatická kontrola je jinak odmítne.
 4. Bez obrázku nech `"image": null`.
 5. S obrázkem ulož soubor do `assets/potions/` a do `image` zapiš jeho cestu.
 
