@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Lektorský panel pro odemykání kroků školení Git a GitHub">
-  <title>Lektorský panel | Git a GitHub</title>
+  <meta name="description" content="Facilitátorské poznámky ke školení Git a GitHub">
+  <title>Facilitátorské poznámky | Git a GitHub</title>
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="facilitator.css">
 </head>
@@ -12,23 +12,43 @@
   <header class="workshop-header">
     <a class="workshop-brand" href="./">
       <img src="../assets/potions/echo-lantern.png" alt="">
-      <span><small>Lektorský panel</small><strong>Git &amp; GitHub</strong></span>
+      <span><small>Alchymistická dílna</small><strong>Facilitátorské poznámky</strong></span>
     </a>
-    <a class="back-link" href="./">Zpět do průvodce</a>
+    <div class="facilitator-header-links">
+      <a href="./">Průvodce</a>
+      <a href="../">Archiv lektvarů</a>
+    </div>
   </header>
+
   <main class="facilitator-main">
     <section class="facilitator-heading">
-      <p class="eyebrow">Řízení tempa</p>
-      <h1>Odemykací odkazy</h1>
-      <p>Odkaz odemkne vybraný krok a všechny předchozí. Nejde o zabezpečení: panel i identifikátory jsou veřejné.</p>
+      <p class="eyebrow">Lektorská osnova</p>
+      <h1>Poznámky k jednotlivým lekcím</h1>
+      <p>Každý blok drží stejnou strukturu: co vysvětlit, co nechat účastníky udělat, podle čeho poznat výsledek a jak lekci uzavřít.</p>
+      <div class="facilitator-stats" aria-label="Rozsah školení">
+        <span><strong id="step-count">0</strong> lekcí</span>
+        <span><strong id="duration-total">0</strong> minut obsahu</span>
+        <span><strong>3</strong> výukové bloky + příprava</span>
+      </div>
     </section>
-    <section class="facilitator-toolbar" aria-label="Nástroje lektora">
-      <label><span>Základní adresa průvodce</span><input id="base-url" type="url"></label>
-      <button id="copy-current" class="nav-button primary" type="button">Zkopírovat první krok</button>
+
+    <section class="facilitator-toolbar" aria-label="Ovládání poznámek">
+      <label class="search-field facilitator-search">
+        <span class="sr-only">Hledat v poznámkách</span>
+        <svg aria-hidden="true" viewBox="0 0 24 24"><path d="m21 21-4.35-4.35m2.35-5.65a8 8 0 1 1-16 0 8 8 0 0 1 16 0Z"/></svg>
+        <input id="notes-search" type="search" placeholder="Hledat lekci, pojem nebo příkaz…">
+      </label>
+      <div class="toolbar-actions">
+        <button id="expand-all" class="nav-button" type="button">Rozbalit vše</button>
+        <button id="collapse-all" class="nav-button" type="button">Sbalit vše</button>
+      </div>
     </section>
-    <div id="facilitator-steps" class="facilitator-steps"></div>
+
+    <nav id="facilitator-chapter-nav" class="facilitator-chapter-nav" aria-label="Kapitoly"></nav>
+    <div id="facilitator-notes" class="facilitator-notes"></div>
+    <p id="notes-empty" class="notes-empty" hidden>Tomuto hledání neodpovídá žádná lekce.</p>
   </main>
-  <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+
   <script type="module" src="facilitator.js"></script>
 </body>
 </html>
