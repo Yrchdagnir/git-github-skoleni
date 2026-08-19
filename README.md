@@ -18,6 +18,18 @@ Rozhraní i startovní recepty lze přepínat mezi češtinou a slovenštinou.
 
 Průvodce je plně česky a slovensky a všechny lekce jsou stále dostupné. Dokončené kroky a jazyk se ukládají pouze v prohlížeči účastníka. Facilitátorská stránka obsahuje cíle, aktivity, očekávané výsledky, rizika a debrief otázky ke každé lekci.
 
+## Pro školitele
+
+Kompletní příprava, scénáře tří workshopů, zprávy účastníkům a záchranný tahák jsou v [TRAINER.md](TRAINER.md).
+
+Rychlá technická kontrola před školením:
+
+```bash
+npm ci
+npx playwright install chromium
+npm run trainer:check
+```
+
 ## Příprava
 
 Potřebuješ Git for Windows, Git Bash, aktuální Node.js LTS a npm.

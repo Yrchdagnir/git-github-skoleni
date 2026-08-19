@@ -6,7 +6,10 @@ const isCi = process.argv.includes("--ci");
 const failures = [];
 
 function run(command, args = []) {
-  const result = spawnSync(command, args, { encoding: "utf8", shell: false });
+  const isWindowsCommand = process.platform === "win32" && command.endsWith(".cmd");
+  const executable = isWindowsCommand ? process.env.ComSpec ?? "cmd.exe" : command;
+  const executableArgs = isWindowsCommand ? ["/d", "/s", "/c", command, ...args] : args;
+  const result = spawnSync(executable, executableArgs, { encoding: "utf8", shell: false });
   return {
     ok: result.status === 0,
     output: (result.stdout || result.stderr || "").trim()

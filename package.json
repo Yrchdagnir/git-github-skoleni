@@ -18,6 +18,7 @@
     "test:headed": "playwright test --headed",
     "doctor": "node scripts/doctor.mjs",
     "doctor:ci": "node scripts/doctor.mjs --ci",
+    "trainer:check": "npm run doctor:ci && npm test",
     "check:pr-title": "node scripts/check-pr-title.mjs"
   },
   "devDependencies": {
