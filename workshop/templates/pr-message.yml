@@ -1,0 +1,17 @@
+name: PR message exercise
+
+on:
+  WORKSHOP_EVENT:
+    branches: [WORKSHOP_BRANCH]
+
+permissions:
+  contents: read
+
+jobs:
+  message:
+    name: Print PR message
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Print message
+        run: echo "WORKSHOP_MESSAGE"

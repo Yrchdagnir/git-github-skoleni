@@ -115,6 +115,18 @@ test("facilitator notes can be searched and expanded", async ({ page }) => {
   await expect(page.locator('[data-step-id="actions-failure"]')).toHaveAttribute("open", "");
 });
 
+test("the Actions lesson uses the incomplete PR message template", async ({ page }) => {
+  await page.goto("/workshop/#actions-edit-workflow");
+
+  await expect(page.getByRole("heading", { name: "Sestav vlastní PR workflow" })).toBeVisible();
+  await expect(page.getByText("WORKSHOP_EVENT", { exact: false })).toBeVisible();
+  await expect(page.getByText("WORKSHOP_BRANCH", { exact: false })).toBeVisible();
+  await expect(page.getByText("WORKSHOP_MESSAGE", { exact: false })).toBeVisible();
+  await expect(
+    page.locator("code").filter({ hasText: "cp workshop/templates/pr-message.yml" })
+  ).toBeVisible();
+});
+
 test("primary controls can be reached and used from the keyboard", async ({ page }) => {
   await page.goto("/workshop/");
   await page.getByRole("button", { name: "Slovenčina" }).focus();

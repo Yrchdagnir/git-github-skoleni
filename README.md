@@ -122,6 +122,7 @@ Pracovní commity i názvy PR používají Conventional Commits. PR se slučují
 - `Semantic PR title` kontroluje název pull requestu.
 - `Release` vytváří tag a GitHub Release.
 - `Deploy Potion Archive` po testech publikuje web na GitHub Pages.
+- `workshop/templates/pr-message.yml` je neaktivní cvičná šablona pro vlastní PR workflow.
 
 ## Bezpečnost cvičení
 
